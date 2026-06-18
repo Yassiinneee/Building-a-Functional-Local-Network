@@ -1,0 +1,493 @@
+===========================================================
+CHECKPOINT REPORT
+LAN NETWORK DESIGN, SUBNETTING, FRAME HANDLING, ROUTING,
+AND INTERNET ACCESS ANALYSIS
+===========================================================
+
+Student: Yassine Kalthoum
+Date: 18/06/2026
+
+===========================================================
+1. INTRODUCTION
+===========================================================
+
+The objective of this project is to design a small Local Area Network (LAN)
+for a company floor and analyze how communication occurs at the Data Link
+Layer (Layer 2) and Network Layer (Layer 3) of the OSI model.
+
+The network includes:
+
+- 1 Router with Internet access
+- 2 Switches
+- 4 Employee PCs
+- 1 Network Printer
+- 1 Wireless Access Point
+- 2 Wireless Devices (Laptop and Smartphone)
+
+The project demonstrates:
+
+- MAC Addressing
+- Ethernet Frame Structure
+- Collision Handling
+- IP Addressing
+- Subnetting
+- DHCP Configuration
+- Routing
+- Packet Forwarding
+- NAT (Network Address Translation)
+
+===========================================================
+2. NETWORK TOPOLOGY
+===========================================================
+
+                    INTERNET
+                        |
+                    [Router]
+                        |
+        ---------------------------------
+        |                               |
+     [Switch1]                     [Switch2]
+        |                               |
+   ------------                  -------------
+   |    |     |                  |    |      |
+  PC1  PC2 Printer             PC3  PC4   Access Point
+                                              |
+                                       ----------------
+                                       |              |
+                                    Laptop       Smartphone
+
+The router serves as the gateway between the local network
+and the Internet.
+
+Switches connect wired devices.
+
+The Access Point provides wireless connectivity.
+
+===========================================================
+3. PART 1 - MAC ADDRESSING & FRAME HANDLING
+===========================================================
+
+3.1 MAC ADDRESS ASSIGNMENT
+
+Each network device must have a unique MAC address.
+
+Device                          MAC Address
+-------------------------------------------------------
+Router                          00:AA:BB:CC:DD:01
+Switch 1                        00:AA:BB:CC:DD:11
+Switch 2                        00:AA:BB:CC:DD:12
+PC1                             00:AA:BB:CC:DD:21
+PC2                             00:AA:BB:CC:DD:22
+PC3                             00:AA:BB:CC:DD:23
+PC4                             00:AA:BB:CC:DD:24
+Printer                         00:AA:BB:CC:DD:30
+Access Point                    00:AA:BB:CC:DD:40
+Laptop                          00:AA:BB:CC:DD:50
+Smartphone                      00:AA:BB:CC:DD:51
+
+-----------------------------------------------------------
+3.2 ETHERNET FRAME STRUCTURE
+-----------------------------------------------------------
+
+Suppose PC1 wants to send a print job to the printer.
+
+PC1 IP Address:
+192.168.10.10
+
+Printer IP Address:
+192.168.10.50
+
+The Ethernet frame contains:
+
++------------------------------------------------+
+| Destination MAC | Source MAC | Data | FCS |
++------------------------------------------------+
+
+Example:
+
+Destination MAC:
+00:AA:BB:CC:DD:30
+
+Source MAC:
+00:AA:BB:CC:DD:21
+
+Data:
+Print Request
+
+FCS:
+Frame Check Sequence used for error detection.
+
+Communication Process:
+
+Step 1:
+PC1 checks whether the printer is on the same subnet.
+
+Step 2:
+PC1 sends an ARP request to discover the printer's MAC address.
+
+Step 3:
+The printer responds with its MAC address.
+
+Step 4:
+PC1 creates the Ethernet frame.
+
+Step 5:
+The switch forwards the frame to the printer.
+
+Step 6:
+The printer receives the frame and processes the print job.
+
+-----------------------------------------------------------
+3.3 COLLISION HANDLING
+-----------------------------------------------------------
+
+A) WIRED ETHERNET
+
+Modern switched Ethernet uses Full-Duplex communication.
+
+Characteristics:
+
+- No shared medium
+- Separate collision domain per switch port
+- No collisions occur
+
+Older Ethernet used CSMA/CD:
+
+Carrier Sense Multiple Access with Collision Detection
+
+Process:
+
+1. Listen before transmitting.
+2. Transmit if medium is free.
+3. Detect collision.
+4. Stop transmission.
+5. Send jam signal.
+6. Wait random time.
+7. Retransmit.
+
+B) WI-FI NETWORKS
+
+Wi-Fi uses CSMA/CA:
+
+Carrier Sense Multiple Access with Collision Avoidance
+
+Process:
+
+1. Listen to channel.
+2. Wait random backoff period.
+3. Transmit frame.
+4. Receive acknowledgment (ACK).
+5. Retransmit if ACK not received.
+
+CSMA/CA reduces collisions because wireless devices
+cannot detect collisions efficiently.
+
+===========================================================
+4. PART 2 - IP ADDRESSING & SUBNETTING
+===========================================================
+
+4.1 SELECTED PRIVATE NETWORK
+
+Network Address:
+
+192.168.10.0/24
+
+Subnet Mask:
+
+255.255.255.0
+
+Available Hosts:
+
+254
+
+-----------------------------------------------------------
+4.2 SUBNETTING DESIGN
+-----------------------------------------------------------
+
+To improve organization and security, the network is
+divided into two subnets.
+
+WIRED NETWORK
+
+Network:
+192.168.10.0/25
+
+Subnet Mask:
+255.255.255.128
+
+Host Range:
+192.168.10.1 - 192.168.10.126
+
+Broadcast Address:
+192.168.10.127
+
+WIRELESS NETWORK
+
+Network:
+192.168.10.128/25
+
+Subnet Mask:
+255.255.255.128
+
+Host Range:
+192.168.10.129 - 192.168.10.254
+
+Broadcast Address:
+192.168.10.255
+
+-----------------------------------------------------------
+4.3 IP ADDRESS ASSIGNMENT
+-----------------------------------------------------------
+
+WIRED DEVICES
+
+Device                IP Address
+------------------------------------
+Router                192.168.10.1
+PC1                   192.168.10.10
+PC2                   192.168.10.11
+PC3                   192.168.10.12
+PC4                   192.168.10.13
+Printer               192.168.10.50
+
+WIRELESS DEVICES
+
+Device                IP Address
+------------------------------------
+Router                192.168.10.129
+Access Point          192.168.10.130
+Laptop                192.168.10.140
+Smartphone            192.168.10.141
+
+-----------------------------------------------------------
+4.4 DEFAULT GATEWAYS
+-----------------------------------------------------------
+
+Wired Devices Gateway:
+
+192.168.10.1
+
+Wireless Devices Gateway:
+
+192.168.10.129
+
+The default gateway is the router interface used to
+communicate with external networks.
+
+-----------------------------------------------------------
+4.5 DHCP ROLE
+-----------------------------------------------------------
+
+DHCP stands for:
+
+Dynamic Host Configuration Protocol
+
+DHCP automatically assigns:
+
+- IP Address
+- Subnet Mask
+- Default Gateway
+- DNS Server
+
+DHCP Process:
+
+1. DHCP Discover
+2. DHCP Offer
+3. DHCP Request
+4. DHCP Acknowledgment
+
+Advantages:
+
+- Automatic configuration
+- Reduced human errors
+- Easier administration
+- Faster deployment
+
+===========================================================
+5. PART 3 - ROUTING & PACKET FORWARDING
+===========================================================
+
+SCENARIO:
+
+A laptop connected to Wi-Fi accesses:
+
+www.example.com
+
+-----------------------------------------------------------
+STEP 1 - DNS RESOLUTION
+-----------------------------------------------------------
+
+The laptop asks the DNS server for the IP address
+associated with the website.
+
+DNS Response:
+
+93.184.216.34
+
+-----------------------------------------------------------
+STEP 2 - PACKET CREATION
+-----------------------------------------------------------
+
+Source IP:
+
+192.168.10.140
+
+Destination IP:
+
+93.184.216.34
+
+The laptop creates an IP packet.
+
+-----------------------------------------------------------
+STEP 3 - SEND TO DEFAULT GATEWAY
+-----------------------------------------------------------
+
+The destination is outside the local network.
+
+The laptop sends the packet to:
+
+192.168.10.129
+
+Packet Path:
+
+Laptop
+→ Access Point
+→ Router
+
+-----------------------------------------------------------
+STEP 4 - ROUTER EXAMINES IP HEADER
+-----------------------------------------------------------
+
+The router reads:
+
+- Source IP
+- Destination IP
+- Protocol
+- TTL
+- Checksum
+
+Destination:
+
+93.184.216.34
+
+-----------------------------------------------------------
+STEP 5 - ROUTING TABLE LOOKUP
+-----------------------------------------------------------
+
+Router Routing Table
+
+Destination Network      Next Hop
+------------------------------------------
+192.168.10.0/24          Local
+0.0.0.0/0                ISP Gateway
+
+The router selects the default route.
+
+-----------------------------------------------------------
+STEP 6 - NAT TRANSLATION
+-----------------------------------------------------------
+
+Private IP:
+
+192.168.10.140
+
+Public IP:
+
+41.225.100.10
+
+NAT converts the private address into a public address.
+
+Example NAT Table
+
+Private IP          Public IP
+--------------------------------
+192.168.10.140      41.225.100.10
+
+Without NAT, private addresses cannot access
+the Internet.
+
+-----------------------------------------------------------
+STEP 7 - INTERNET FORWARDING
+-----------------------------------------------------------
+
+Packet Route
+
+Laptop
+↓
+Access Point
+↓
+Router
+↓
+ISP
+↓
+Internet Routers
+↓
+Web Server
+
+Each router:
+
+1. Reads destination IP.
+2. Searches routing table.
+3. Selects next hop.
+4. Forwards packet.
+
+-----------------------------------------------------------
+STEP 8 - RESPONSE RETURNS
+-----------------------------------------------------------
+
+The web server sends a response.
+
+Path:
+
+Web Server
+↓
+Internet
+↓
+ISP
+↓
+Router
+↓
+Laptop
+
+The router checks its NAT table and maps the public
+address back to the correct private device.
+
+===========================================================
+6. CONCLUSION
+===========================================================
+
+This project demonstrates the complete design and operation
+of a small enterprise LAN.
+
+Concepts covered:
+
+✓ MAC Addressing
+
+✓ Ethernet Frame Structure
+
+✓ ARP Resolution
+
+✓ Collision Handling (CSMA/CD and CSMA/CA)
+
+✓ IP Addressing
+
+✓ Subnetting
+
+✓ DHCP Configuration
+
+✓ Routing
+
+✓ Packet Forwarding
+
+✓ Routing Tables
+
+✓ NAT Translation
+
+✓ Internet Communication
+
+The network design provides efficient communication between
+wired and wireless devices while maintaining Internet
+connectivity through routing and NAT services.
+===========================================================
+END OF REPORT
+===========================================================

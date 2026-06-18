@@ -1,0 +1,147 @@
+{
+  "networkName": "Company Floor LAN",
+  "devices": [
+    {
+      "id": "R1",
+      "type": "Router",
+      "name": "Main Router",
+      "ip": {
+        "wired": "192.168.10.1",
+        "wireless": "192.168.10.129"
+      },
+      "mac": "00:AA:BB:CC:DD:01"
+    },
+    {
+      "id": "SW1",
+      "type": "Switch",
+      "name": "Switch 1",
+      "mac": "00:AA:BB:CC:DD:11"
+    },
+    {
+      "id": "SW2",
+      "type": "Switch",
+      "name": "Switch 2",
+      "mac": "00:AA:BB:CC:DD:12"
+    },
+    {
+      "id": "PC1",
+      "type": "PC",
+      "ip": "192.168.10.10",
+      "mac": "00:AA:BB:CC:DD:21"
+    },
+    {
+      "id": "PC2",
+      "type": "PC",
+      "ip": "192.168.10.11",
+      "mac": "00:AA:BB:CC:DD:22"
+    },
+    {
+      "id": "PC3",
+      "type": "PC",
+      "ip": "192.168.10.12",
+      "mac": "00:AA:BB:CC:DD:23"
+    },
+    {
+      "id": "PC4",
+      "type": "PC",
+      "ip": "192.168.10.13",
+      "mac": "00:AA:BB:CC:DD:24"
+    },
+    {
+      "id": "PR1",
+      "type": "Printer",
+      "ip": "192.168.10.50",
+      "mac": "00:AA:BB:CC:DD:30"
+    },
+    {
+      "id": "AP1",
+      "type": "AccessPoint",
+      "ip": "192.168.10.130",
+      "mac": "00:AA:BB:CC:DD:40"
+    },
+    {
+      "id": "LAP1",
+      "type": "Laptop",
+      "ip": "192.168.10.140",
+      "mac": "00:AA:BB:CC:DD:50"
+    },
+    {
+      "id": "PHONE1",
+      "type": "Smartphone",
+      "ip": "192.168.10.141",
+      "mac": "00:AA:BB:CC:DD:51"
+    }
+  ],
+  "subnets": [
+    {
+      "name": "Wired LAN",
+      "network": "192.168.10.0/25",
+      "subnetMask": "255.255.255.128",
+      "gateway": "192.168.10.1"
+    },
+    {
+      "name": "Wireless LAN",
+      "network": "192.168.10.128/25",
+      "subnetMask": "255.255.255.128",
+      "gateway": "192.168.10.129"
+    }
+  ],
+  "connections": [
+    {
+      "from": "R1",
+      "to": "SW1",
+      "type": "Ethernet"
+    },
+    {
+      "from": "R1",
+      "to": "SW2",
+      "type": "Ethernet"
+    },
+    {
+      "from": "SW1",
+      "to": "PC1",
+      "type": "Ethernet"
+    },
+    {
+      "from": "SW1",
+      "to": "PC2",
+      "type": "Ethernet"
+    },
+    {
+      "from": "SW1",
+      "to": "PR1",
+      "type": "Ethernet"
+    },
+    {
+      "from": "SW2",
+      "to": "PC3",
+      "type": "Ethernet"
+    },
+    {
+      "from": "SW2",
+      "to": "PC4",
+      "type": "Ethernet"
+    },
+    {
+      "from": "SW2",
+      "to": "AP1",
+      "type": "Ethernet"
+    },
+    {
+      "from": "AP1",
+      "to": "LAP1",
+      "type": "WiFi"
+    },
+    {
+      "from": "AP1",
+      "to": "PHONE1",
+      "type": "WiFi"
+    }
+  ],
+  "internet": {
+    "enabled": true,
+    "nat": true,
+    "dns": "8.8.8.8",
+    "ispConnection": "Router WAN Interface"
+  }
+}
